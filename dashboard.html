@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painzy ExE - Dashboard</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">P</div>
+                    <div class="logo-text">
+                        <h2>Painzy ExE</h2>
+                        <span id="userRole">Member</span>
+                    </div>
+                </div>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul class="nav-menu">
+                    <li class="nav-item active" data-page="overview">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Overview</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-page="send-bug">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-bug"></i>
+                            <span>Send Bug</span>
+                        </a>
+                    </li>
+                    <li class="nav-item admin-only" data-page="manage-users" style="display: none;">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-users"></i>
+                            <span>Manage Users</span>
+                        </a>
+                    </li>
+                    <li class="nav-item reseller-only" data-page="create-member" style="display: none;">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Create Member</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dev-only" data-page="system-settings" style="display: none;">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-cogs"></i>
+                            <span>System Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <span class="username" id="currentUsername">User</span>
+                        <span class="user-status online">Online</span>
+                    </div>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <div class="header-left">
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="page-title" id="pageTitle">Overview</h1>
+                </div>
+                <div class="header-right">
+                    <div class="header-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-clock"></i>
+                            <span id="currentTime"></span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-wifi"></i>
+                            <span class="status-online">Online</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Overview Page -->
+            <div class="page-content" id="overview-page">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-bug"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalBugs">0</h3>
+                            <p>Total Bugs Sent</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="successRate">100%</h3>
+                            <p>Success Rate</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalUsers">1</h3>
+                            <p>Total Users</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Online</h3>
+                            <p>System Status</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="activity-section">
+                    <h2>Recent Activity</h2>
+                    <div class="activity-list" id="activityList">
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-sign-in-alt"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p>Successfully logged in</p>
+                                <span class="activity-time">Just now</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Send Bug Page -->
+            <div class="page-content" id="send-bug-page" style="display: none;">
+                <div class="bug-sender-container">
+                    <div class="bug-form-card">
+                        <h2>Send Bug Attack</h2>
+                        <form class="bug-form" id="bugForm">
+                            <div class="form-group">
+                                <label for="targetNumber">Target Phone Number</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-phone"></i>
+                                    <input type="text" id="targetNumber" placeholder="62812345678" required>
+                                    <span class="input-hint">Format: 62812345678 (without +)</span>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bugMethod">Bug Method</label>
+                                <div class="method-selector">
+                                    <div class="method-option" data-method="crlsql">
+                                        <div class="method-icon">
+                                            <i class="fas fa-database"></i>
+                                        </div>
+                                        <div class="method-info">
+                                            <h3>CrlSQL</h3>
+                                            <p>Advanced carousel bug attack</p>
+                                        </div>
+                                        <div class="method-status">
+                                            <span class="status-badge active">Active</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="method-option" data-method="blitzrforce">
+                                        <div class="method-icon">
+                                            <i class="fas fa-bolt"></i>
+                                        </div>
+                                        <div class="method-info">
+                                            <h3>BlitzrForce</h3>
+                                            <p>Force call crash attack</p>
+                                        </div>
+                                        <div class="method-status">
+                                            <span class="status-badge active">Active</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group" id="fjidsGroup" style="display: none;">
+                                <label for="fjidsParam">FJIDS Parameter</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-code"></i>
+                                    <input type="text" id="fjidsParam" placeholder="Enter FJIDS parameter">
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="send-bug-btn">
+                                <span class="btn-text">
+                                    <i class="fas fa-paper-plane"></i>
+                                    Send Bug Attack
+                                </span>
+                                <div class="btn-loader">
+                                    <div class="spinner"></div>
+                                </div>
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div class="bug-history-card">
+                        <h3>Attack History</h3>
+                        <div class="history-list" id="bugHistory">
+                            <div class="history-item">
+                                <div class="history-icon success">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="history-content">
+                                    <p><strong>CrlSQL</strong> → 628123456789</p>
+                                    <span class="history-time">2 minutes ago</span>
+                                </div>
+                                <div class="history-status success">Success</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Manage Users Page -->
+            <div class="page-content" id="manage-users-page" style="display: none;">
+                <div class="users-management">
+                    <div class="users-header">
+                        <h2>User Management</h2>
+                        <button class="create-user-btn" onclick="openCreateUserModal()">
+                            <i class="fas fa-plus"></i>
+                            Create User
+                        </button>
+                    </div>
+                    
+                    <div class="users-table-container">
+                        <table class="users-table">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Role</th>
+                                    <th>Telegram ID</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <!-- Users will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Create Member Page -->
+            <div class="page-content" id="create-member-page" style="display: none;">
+                <div class="create-user-container">
+                    <div class="create-user-card">
+                        <h2>Create New Member</h2>
+                        <form class="create-user-form" id="createMemberForm">
+                            <div class="form-group">
+                                <label for="newUsername">Username</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" id="newUsername" placeholder="Enter username" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="newPassword">Password</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" id="newPassword" placeholder="Enter password" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="newTelegram">Telegram ID</label>
+                                <div class="input-wrapper">
+                                    <i class="fab fa-telegram"></i>
+                                    <input type="text" id="newTelegram" placeholder="Enter Telegram ID" required>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="create-user-btn">
+                                <span class="btn-text">
+                                    <i class="fas fa-user-plus"></i>
+                                    Create Member
+                                </span>
+                                <div class="btn-loader">
+                                    <div class="spinner"></div>
+                                </div>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- System Settings Page -->
+            <div class="page-content" id="system-settings-page" style="display: none;">
+                <div class="settings-container">
+                    <h2>System Settings</h2>
+                    <div class="settings-grid">
+                        <div class="setting-card">
+                            <h3>API Configuration</h3>
+                            <div class="setting-item">
+                                <label>Telegram Bot Token</label>
+                                <input type="text" id="botToken" placeholder="Enter bot token">
+                            </div>
+                            <div class="setting-item">
+                                <label>Chat ID</label>
+                                <input type="text" id="chatId" placeholder="Enter chat ID">
+                            </div>
+                            <button class="save-settings-btn">Save API Settings</button>
+                        </div>
+                        
+                        <div class="setting-card">
+                            <h3>System Status</h3>
+                            <div class="status-grid">
+                                <div class="status-item">
+                                    <span>Server Status</span>
+                                    <span class="status-badge active">Online</span>
+                                </div>
+                                <div class="status-item">
+                                    <span>WhatsApp Connection</span>
+                                    <span class="status-badge active">Connected</span>
+                                </div>
+                                <div class="status-item">
+                                    <span>Database</span>
+                                    <span class="status-badge active">Healthy</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Create User Modal -->
+    <div class="modal" id="createUserModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New User</h3>
+                <button class="modal-close" onclick="closeCreateUserModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form class="modal-form" id="createUserModalForm">
+                <div class="form-group">
+                    <label for="modalUsername">Username</label>
+                    <input type="text" id="modalUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="modalPassword">Password</label>
+                    <input type="password" id="modalPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="modalTelegram">Telegram ID</label>
+                    <input type="text" id="modalTelegram" required>
+                </div>
+                <div class="form-group">
+                    <label for="modalRole">Role</label>
+                    <select id="modalRole" required>
+                        <option value="member">Member</option>
+                        <option value="reseller">Reseller</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeCreateUserModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Create User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast">
+        <div class="toast-content">
+            <i class="toast-icon"></i>
+            <span class="toast-message"></span>
+        </div>
+    </div>
+    
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
